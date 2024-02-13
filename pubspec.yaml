@@ -1,7 +1,7 @@
 name: paypal_login
-description: A starting point for Dart libraries or applications.
+description: An easy solution for login with paypal API.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/A-dalyomer/paypal_login.git
 
 environment:
   sdk: ^3.1.2
