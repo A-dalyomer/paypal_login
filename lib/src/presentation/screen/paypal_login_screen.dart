@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -20,8 +18,25 @@ class PaypalLoginScreen extends StatefulWidget {
 }
 
 class _PaypalLoginScreenState extends State<PaypalLoginScreen> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    _controller = WebViewController();
+    _controller.loadRequest(Uri.parse(widget.url));
+    _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    _controller.setNavigationDelegate(NavigationDelegate(
+      onNavigationRequest: (navigationRequest) {
+        if (widget.redirectURL != null &&
+            navigationRequest.url.startsWith(widget.redirectURL!)) {
+          Navigator.pop(context, navigationRequest.url);
+          return NavigationDecision.prevent;
+        }
+        return NavigationDecision.navigate;
+      },
+    ));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +46,7 @@ class _PaypalLoginScreenState extends State<PaypalLoginScreen> {
           children: [
             widget.appBar,
             Expanded(
-              child: WebView(
-                initialUrl: widget.url,
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                },
-                navigationDelegate: (NavigationRequest request) {
-                  if (widget.redirectURL != null &&
-                      request.url.startsWith(widget.redirectURL!)) {
-                    Navigator.pop(context, request.url);
-                    return NavigationDecision.prevent;
-                  }
-                  return NavigationDecision.navigate;
-                },
-              ),
+              child: WebViewWidget(controller: _controller),
             ),
           ],
         ),

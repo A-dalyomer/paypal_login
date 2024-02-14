@@ -13,9 +13,9 @@ dependencies:
   # path: ^1.8.0
   flutter:
     sdk: flutter
-  webview_flutter: ^3.0.4
-  uuid: ^3.0.7
-  dio: ^5.2.1+1
+  webview_flutter: ^4.7.0
+  uuid: ^4.3.3
+  dio: ^5.4.0
 
 
 dev_dependencies:
